@@ -60,7 +60,7 @@ O sistema possui um campo de entrada de texto (`<input>`) onde:
 
     - Execute o container Docker:
         ```bash
-        docker run -d -p 5000:80 mvc-signalr-example
+        docker run -d -p 5000:8080 mvc-signalr-example
         ```
 
     - Abra o navegador e acesse `http://localhost:5000` para testar a funcionalidade.
