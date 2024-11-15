@@ -32,7 +32,7 @@ O sistema possui um campo de entrada de texto (`<input>`) onde:
 
 1. Clone o repositório:
     ```bash
-    git clone <URL do repositório>
+    git clone [<URL do repositório>](https://github.com/daviEmanuelNogueira/SampleSignalR.git)
     ```
 
 2. **Opção 1: Rodar com .NET**:
