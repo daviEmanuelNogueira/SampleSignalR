@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Simple SignalR";
+}
+
+
+<div class="text-center">
+    <p id="status"></p>
+</div>
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <label for="myInput"><b>Exemplo:</b></label><br />
+        <input type="text" class="form-control" id="myInput" oninput="onWriting()" onfocus="focused()"
+                onblur="unFocused()" placeholder="Digite seu texto aqui!"/>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+<script>
+    var connection = new signalR.HubConnectionBuilder().withUrl("/myhub").build();
+
+    connection.on("BlockInput", function (connectionId) {
+        document.getElementById("myInput").disabled = true;
+        document.getElementById("myInput").title = connectionId;
+    });
+
+    connection.on("UnblockInput", function () {
+        document.getElementById("myInput").disabled = false
+        document.getElementById("myInput").title = "";
+    });
+
+    connection.on("OnWriting", function (text) {
+        document.getElementById("myInput").value = text
+        document.getElementById("myInput").title = "";
+    });
+
+    connection.start().then(function () {
+        document.getElementById("status").innerHTML = `Hub connected, connectionId: ${connection.connectionId} `;
+    }).catch(function (eer) {
+        return console.error(eer.toString());
+    });
+
+    function onWriting() {
+        var text = document.getElementById("myInput").value;
+
+        connection.invoke("OnWriting", text).catch(function (eer) {
+            return console.error(eer.toString());
+        });
+        event.preventDefault();
+    }
+
+    function focused() {
+        connection.invoke("BlockInput", connection.connectionId).catch(function (eer) {
+            return console.error(eer.toString());
+        });
+        event.preventDefault();
+    }
+
+    function unFocused() {
+        connection.invoke("UnblockInput").catch(function (eer) {
+            return console.error(eer.toString());
+        });
+        event.preventDefault();
+    }
+</script>
